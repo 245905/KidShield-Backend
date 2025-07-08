@@ -1,0 +1,24 @@
+# Scripts
+*.sh text eol=lf
+*.cmd text eol=crlf
+
+# Maven Wrapper
+/mvnw text eol=lf
+/mvnw.cmd text eol=crlf
+
+# Directory Maven Wrapper
+.mvn/wrapper/maven-wrapper.properties text eol=lf
+.mvn/wrapper/maven-wrapper.jar binary
+
+# Java sources
+*.java text eol=lf
+
+# Configuration and resources
+*.xml text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Documentation
+*.md text eol=lf
+*.txt text eol=lf
