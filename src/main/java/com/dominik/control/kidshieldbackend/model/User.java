@@ -20,16 +20,23 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, name = "email", length = 40)
+    @Column(nullable = false, unique = true, length = 40)
     private String email;
-    @Column(name = "password_hash")
-    private String passwordHash;
 
-    @Column(name = "created_at")
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
-    @Column(name = "last_login")
+    @Column(nullable = false)
     private LocalDateTime lastLogin;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
+    @Column(nullable = false)
+    private Boolean isActive = true;
+
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
+
 }

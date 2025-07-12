@@ -15,7 +15,7 @@ public class UserDto {
     private Long id;
 
     private String email;
-    private String passwordHash;
+    private String password;
 
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
