@@ -49,4 +49,8 @@ public class KidShieldUserDetails implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
+    public Long getId() {
+        return user.getId();
+    }
 }
