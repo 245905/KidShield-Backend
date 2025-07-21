@@ -2,8 +2,10 @@ package com.dominik.control.kidshieldbackend.controller;
 
 import com.dominik.control.kidshieldbackend.dto.AuthResponse;
 import com.dominik.control.kidshieldbackend.dto.LoginRequest;
+import com.dominik.control.kidshieldbackend.dto.RegisterRequest;
+import com.dominik.control.kidshieldbackend.model.User;
 import com.dominik.control.kidshieldbackend.service.AuthenticationService;
-import lombok.AllArgsConstructor;
+import com.dominik.control.kidshieldbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     @PostMapping(path = "/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest){
@@ -31,5 +34,13 @@ public class AuthController {
                 .expiresIn(86400)
                 .build();
         return ResponseEntity.ok(authResponse);
+    }
+
+    @PostMapping(path = "/register")
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest){
+
+        User user = userService.createUser(registerRequest);
+
+        return ResponseEntity.ok("User registered successfully!");
     }
 }
