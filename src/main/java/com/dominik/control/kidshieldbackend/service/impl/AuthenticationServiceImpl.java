@@ -35,7 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public UserDetails authenticate(String email, String password) {
         log.info("Authenticating user: {}", email);
-        log.info("Invoked authenticate() from class: {}", this.getClass().getName());
+        log.info("Invoked authenticate() from class: {}", AuthenticationServiceImpl.class.getName());
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
