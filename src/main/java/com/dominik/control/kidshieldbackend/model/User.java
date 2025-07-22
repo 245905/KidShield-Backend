@@ -26,6 +26,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserType userType;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)
@@ -37,6 +41,7 @@ public class User {
     @PrePersist
     protected void onCreate(){
         this.createdAt = LocalDateTime.now();
+        this.lastLogin = LocalDateTime.now();
     }
 
 }

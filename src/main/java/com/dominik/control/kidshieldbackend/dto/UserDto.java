@@ -1,5 +1,6 @@
 package com.dominik.control.kidshieldbackend.dto;
 
+import com.dominik.control.kidshieldbackend.model.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class UserDto {
 
     private String email;
     private String password;
+    private UserType userType;
 
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
