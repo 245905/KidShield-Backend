@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newUser.setUserType(UserType.MONITORED);
         newUser.setIsActive(true);
+
         return userRepository.save(newUser);
     }
 }
