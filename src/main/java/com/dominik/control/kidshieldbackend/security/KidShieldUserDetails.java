@@ -17,7 +17,10 @@ public class KidShieldUserDetails implements UserDetails {
     private final User user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+                "ROLE_" + user.getUserType().name()
+        );
+        return List.of(authority);
     }
 
     @Override
