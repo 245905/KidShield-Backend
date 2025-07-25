@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -31,18 +33,18 @@ public class User {
     private UserType userType;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
-    @Column(nullable = false)
     private LocalDateTime lastLogin;
 
     @Builder.Default
     @Column(nullable = false)
     private Boolean isActive = true;
 
-    @PrePersist
-    protected void onCreate(){
-        this.createdAt = LocalDateTime.now();
-        this.lastLogin = LocalDateTime.now();
-    }
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+    
 }

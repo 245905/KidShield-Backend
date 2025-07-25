@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newUser.setUserType(UserType.MONITORED);
         newUser.setIsActive(true);
-
+        newUser.setLastLogin(LocalDateTime.now());
         return userRepository.save(newUser);
     }
 }

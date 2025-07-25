@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -25,8 +27,6 @@ public class RefreshToken {
     private UUID family;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
-    @Column(nullable = false)
     private LocalDateTime expiresAt;
 
     @Builder.Default
@@ -39,4 +39,12 @@ public class RefreshToken {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 }
