@@ -50,7 +50,7 @@ public class KidShieldUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return user.getIsActive();
     }
 
     public Long getId() {
