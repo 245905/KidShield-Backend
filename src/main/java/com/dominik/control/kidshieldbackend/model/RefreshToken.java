@@ -9,35 +9,36 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "refresh_tokens")
+public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true, length = 40)
-    private String email;
+    @Column(unique = true, nullable = false, updatable = false)
+    private UUID token;
 
     @Column(nullable = false)
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserType userType;
+    private UUID family;
 
     @Column(nullable = false)
-    private LocalDateTime lastLogin;
+    private LocalDateTime expiresAt;
 
     @Builder.Default
     @Column(nullable = false)
-    private Boolean isActive = true;
+    private Boolean isRevoked = false;
+
+    private String userAgent;
+    private String ipAddress;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -46,5 +47,4 @@ public class User {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-    
 }

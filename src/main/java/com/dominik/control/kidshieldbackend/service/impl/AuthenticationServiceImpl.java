@@ -30,12 +30,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private final Long jwtExpiryMs = 86400000L;
+    @Value("${jwt.access.expiration-ms}")
+    private Long jwtExpiryMs;
 
     @Override
     public UserDetails authenticate(String email, String password) {
         log.info("Authenticating user: {}", email);
-        log.info("Invoked authenticate() from class: {}", AuthenticationServiceImpl.class.getName());
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
