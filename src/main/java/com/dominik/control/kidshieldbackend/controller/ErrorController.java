@@ -105,10 +105,10 @@ public class ErrorController {
     public ResponseEntity<ApiErrorResponse> handleUserNotFoundException(UserNotFoundException ex){
         log.error("Caught UserNotFoundException", ex);
         ApiErrorResponse error = ApiErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.NOT_FOUND.value())
                 .message("User not found")
                 .build();
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EmailAlreadyTakenException.class)
@@ -145,9 +145,9 @@ public class ErrorController {
     public ResponseEntity<ApiErrorResponse> handleRefreshTokenNotFoundException(RefreshTokenNotFoundException ex){
         log.error("Caught RefreshTokenNotFoundException", ex);
         ApiErrorResponse error = ApiErrorResponse.builder()
-                .status(HttpStatus.UNAUTHORIZED.value())
+                .status(HttpStatus.NOT_FOUND.value())
                 .message("Refresh token not found.")
                 .build();
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
