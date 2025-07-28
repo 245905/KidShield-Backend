@@ -1,6 +1,7 @@
 package com.dominik.control.kidshieldbackend.service.impl;
 
 import com.dominik.control.kidshieldbackend.dto.RegisterRequest;
+import com.dominik.control.kidshieldbackend.exception.EmailAlreadyTakenException;
 import com.dominik.control.kidshieldbackend.model.User;
 import com.dominik.control.kidshieldbackend.model.UserType;
 import com.dominik.control.kidshieldbackend.repository.UserRepository;
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User createUser(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new RuntimeException("Email is already taken");
+            throw new EmailAlreadyTakenException("Email is already taken: " + registerRequest.getEmail());
         }
 
         // Create new user's account
