@@ -6,11 +6,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
+@ToString(exclude = {"monitored", "supervisors"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,6 +41,19 @@ public class User {
     @Builder.Default
     @Column(nullable = false)
     private Boolean isActive = true;
+
+    @ManyToMany
+    @Builder.Default
+    @JoinTable(
+            name = "user_relationships",
+            joinColumns = @JoinColumn(name = "supervisor_id"),
+            inverseJoinColumns = @JoinColumn(name = "monitored_id")
+    )
+    private List<User> monitored = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "monitored")
+    @Builder.Default
+    private List<User> supervisors = new ArrayList<>();
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

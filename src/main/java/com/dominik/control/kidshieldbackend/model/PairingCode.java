@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
+@ToString(exclude = {"monitored"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
