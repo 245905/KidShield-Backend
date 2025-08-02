@@ -11,35 +11,32 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = {"user"})
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "refresh_tokens")
-public class RefreshToken {
+@Table(name = "pairing_codes")
+public class PairingCode {
 
     @Id
     @Column(unique = true, nullable = false, updatable = false)
     @EqualsAndHashCode.Include
-    private UUID token;
+    private UUID id;
 
+    @Column(nullable = false, updatable = false)
+    private String pin;
+
+    @Builder.Default
     @Column(nullable = false)
-    private UUID family;
+    private Boolean used = false;
 
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Boolean isRevoked = false;
-
-    private String userAgent;
-    private String ipAddress;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private User monitored;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
