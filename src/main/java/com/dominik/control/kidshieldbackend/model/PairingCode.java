@@ -28,8 +28,9 @@ public class PairingCode {
     private String pin;
 
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Boolean used = false;
+    private PairingCodeStatus status = PairingCodeStatus.UNUSED;
 
     @Column(nullable = false)
     private LocalDateTime expiresAt;
