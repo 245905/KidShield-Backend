@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,6 +32,7 @@ public class PairingCodeServiceImpl implements PairingCodeService {
 
     private final PairingCodeRepository pairingCodeRepository;
     private final UserRepository userRepository;
+    private final Clock clock;
 
     @Override
     @Transactional
@@ -47,7 +49,7 @@ public class PairingCodeServiceImpl implements PairingCodeService {
             boolean exists = pairingCodeRepository.existsByPinAndStatusAndExpiresAtAfter(
                     potentialPin,
                     PairingCodeStatus.UNUSED,
-                    LocalDateTime.now()
+                    LocalDateTime.now(clock)
             );
             if (!exists) {
                 pin = potentialPin;
@@ -65,7 +67,7 @@ public class PairingCodeServiceImpl implements PairingCodeService {
                 .id(UUID.randomUUID())
                 .pin(pin)
                 .monitored(user)
-                .expiresAt(LocalDateTime.now().plus(Duration.ofMillis(pairingCodeDurationMs)))
+                .expiresAt(LocalDateTime.now(clock).plus(Duration.ofMillis(pairingCodeDurationMs)))
                 .build();
 
         code = pairingCodeRepository.save(code);
@@ -114,7 +116,7 @@ public class PairingCodeServiceImpl implements PairingCodeService {
         if (pairingCode.getStatus() != PairingCodeStatus.UNUSED) {
             throw new IllegalStateException("Pairing code has already been used.");
         }
-        if (pairingCode.getExpiresAt().isBefore(LocalDateTime.now())) {
+        if (pairingCode.getExpiresAt().isBefore(LocalDateTime.now(clock))) {
             throw new PairingCodeExpiredException("Pairing code has expired.");
         }
 
