@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 @Service
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Clock clock;
 
     @Override
     @Transactional
@@ -33,7 +35,7 @@ public class UserServiceImpl implements UserService {
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newUser.setUserType(UserType.MONITORED);
         newUser.setIsActive(true);
-        newUser.setLastLogin(LocalDateTime.now());
+        newUser.setLastLogin(LocalDateTime.now(clock));
         return userRepository.save(newUser);
     }
 }

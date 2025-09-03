@@ -150,4 +150,24 @@ public class ErrorController {
                 .build();
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(PairingCodeExpiredException.class)
+    public ResponseEntity<ApiErrorResponse> handlePairingCodeExpiredException(PairingCodeExpiredException ex){
+        log.error("Caught PairingCodeExpiredException", ex);
+        ApiErrorResponse error = ApiErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("Pairing code already expired.")
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PairingCodeNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handlePairingCodeNotFoundException(PairingCodeNotFoundException ex){
+        log.error("Caught PairingCodeNotFoundException", ex);
+        ApiErrorResponse error = ApiErrorResponse.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message("Pairing code not found.")
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }

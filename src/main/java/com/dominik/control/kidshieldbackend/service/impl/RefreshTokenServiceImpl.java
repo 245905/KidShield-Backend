@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
+    private final Clock clock;
 
     @Override
     @Transactional
@@ -39,7 +41,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         RefreshToken refreshToken = RefreshToken.builder()
                 .user(user)
                 .family(tokenFamily)
-                .expiresAt(LocalDateTime.now().plus(Duration.ofMillis(refreshTokenDurationMs)))
+                .expiresAt(LocalDateTime.now(clock).plus(Duration.ofMillis(refreshTokenDurationMs)))
                 .token(UUID.randomUUID())
                 .build();
 
@@ -66,7 +68,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         oldToken.setIsRevoked(true);
         refreshTokenRepository.save(oldToken);
 
-        if(oldToken.getExpiresAt().isBefore(LocalDateTime.now())){
+        if(oldToken.getExpiresAt().isBefore(LocalDateTime.now(clock))){
             refreshTokenRepository.revokeAllByFamily(oldToken.getFamily());
             throw new RefreshTokenExpiredException("Refresh token family has expired.");
         }
@@ -75,7 +77,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 .user(oldToken.getUser())
                 .family(oldToken.getFamily())
                 .token(UUID.randomUUID())
-                .expiresAt(LocalDateTime.now().plusMinutes(refreshTokenDurationMs))
+                .expiresAt(LocalDateTime.now(clock).plusMinutes(refreshTokenDurationMs))
                 .build();
 
         return refreshTokenRepository.save(newToken);
