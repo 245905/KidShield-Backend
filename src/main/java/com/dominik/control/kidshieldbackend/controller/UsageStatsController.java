@@ -29,6 +29,6 @@ public class UsageStatsController {
     ){
 
         usageStatsService.storeData(currentUser.getId(), usageStatsRequests);
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("Successfully stored data");
     }
 }

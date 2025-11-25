@@ -29,6 +29,6 @@ public class AppInfoController {
     ){
 
         appInfoService.storeData(currentUser.getId(), appInfoRequests);
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("Successfully stored data");
     }
 }
