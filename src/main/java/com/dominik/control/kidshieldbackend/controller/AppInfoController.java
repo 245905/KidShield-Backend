@@ -26,7 +26,7 @@ public class AppInfoController {
     public ResponseEntity<?> pushData(
             @CurrentUser KidShieldUserDetails currentUser,
             @RequestBody List<AppInfoRequest> appInfoRequests
-            ){
+    ){
 
         appInfoService.storeData(currentUser.getId(), appInfoRequests);
         return ResponseEntity.ok("");
