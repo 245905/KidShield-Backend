@@ -3,7 +3,6 @@ package com.dominik.control.kidshieldbackend.service.impl;
 import com.dominik.control.kidshieldbackend.dto.RegisterRequest;
 import com.dominik.control.kidshieldbackend.exception.EmailAlreadyTakenException;
 import com.dominik.control.kidshieldbackend.model.User;
-import com.dominik.control.kidshieldbackend.model.UserType;
 import com.dominik.control.kidshieldbackend.repository.UserRepository;
 import com.dominik.control.kidshieldbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,7 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setEmail(registerRequest.getEmail());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        newUser.setUserType(UserType.MONITORED);
+        newUser.setUserType(registerRequest.getUserType());
         newUser.setIsActive(true);
         newUser.setLastLogin(LocalDateTime.now(clock));
         return userRepository.save(newUser);

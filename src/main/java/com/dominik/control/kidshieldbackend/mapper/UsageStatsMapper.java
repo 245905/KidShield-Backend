@@ -1,6 +1,7 @@
 package com.dominik.control.kidshieldbackend.mapper;
 
 import com.dominik.control.kidshieldbackend.dto.UsageStatsRequest;
+import com.dominik.control.kidshieldbackend.dto.UsageStatsResponse;
 import com.dominik.control.kidshieldbackend.model.UsageStats;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -9,4 +10,5 @@ import org.mapstruct.ReportingPolicy;
 public interface UsageStatsMapper {
 
     UsageStats toEntity(UsageStatsRequest usageStats);
+    UsageStatsResponse toDto(UsageStats usageStats);
 }

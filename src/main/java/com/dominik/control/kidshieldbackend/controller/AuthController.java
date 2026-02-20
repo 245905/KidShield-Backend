@@ -1,9 +1,6 @@
 package com.dominik.control.kidshieldbackend.controller;
 
-import com.dominik.control.kidshieldbackend.dto.AuthResponse;
-import com.dominik.control.kidshieldbackend.dto.LoginRequest;
-import com.dominik.control.kidshieldbackend.dto.RefreshTokenRequest;
-import com.dominik.control.kidshieldbackend.dto.RegisterRequest;
+import com.dominik.control.kidshieldbackend.dto.*;
 import com.dominik.control.kidshieldbackend.model.RefreshToken;
 import com.dominik.control.kidshieldbackend.model.User;
 import com.dominik.control.kidshieldbackend.security.KidShieldUserDetails;
@@ -68,11 +65,11 @@ public class AuthController {
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest registerRequest){
 
         User user = userService.createUser(registerRequest);
 
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
     /**
@@ -80,9 +77,9 @@ public class AuthController {
      * This endpoint requires the client to send its refresh token in the body.
      */
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<MessageResponse> logout(@RequestBody RefreshTokenRequest request) {
         refreshTokenService.logout(request.getRefreshToken());
-        return ResponseEntity.ok("User logged out successfully from this device.");
+        return ResponseEntity.ok(new MessageResponse("User logged out successfully from this device."));
     }
 
     /**
@@ -90,9 +87,9 @@ public class AuthController {
      * This also requires the client's current refresh token to identify the user.
      */
     @PostMapping("/logout-all")
-    public ResponseEntity<String> logoutAll(@RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<MessageResponse> logoutAll(@RequestBody RefreshTokenRequest request) {
         refreshTokenService.logoutAll(request.getRefreshToken());
-        return ResponseEntity.ok("User logged out successfully from all devices.");
+        return ResponseEntity.ok(new MessageResponse("User logged out successfully from all devices."));
     }
 
 }

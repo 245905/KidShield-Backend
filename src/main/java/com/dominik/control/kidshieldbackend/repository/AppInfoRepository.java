@@ -15,4 +15,7 @@ public interface AppInfoRepository extends JpaRepository<AppInfo, Long> {
     @Query("SELECT ai FROM AppInfo ai WHERE ai.user = :user AND ai.referenceNumber = " +
             "(SELECT MAX(ai2.referenceNumber) FROM AppInfo ai2 WHERE ai2.user = :user)")
     List<AppInfo> findAllByUserWithMaxReferenceNumber(@Param("user") User user);
+
+    @Query("SELECT MAX(referenceNumber) FROM AppInfo WHERE user = :user")
+    Long findMaxReferenceNumber(@Param("user") User user);
 }

@@ -27,11 +27,7 @@ public class UsageStats {
     @Column(nullable = false)
     private Date date;
     @Column(nullable = false)
-    private String appName;
-    @Column(nullable = false)
     private String packageName;
-    @Column(nullable = false)
-    private Boolean isSystemApp;
 
     @Column(nullable = false)
     private Long lastTimeUsed;
