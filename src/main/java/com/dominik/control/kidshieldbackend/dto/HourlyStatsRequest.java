@@ -15,7 +15,7 @@ import java.util.Date;
 public class HourlyStatsRequest {
 
     private Date date;
-    private Date hour;
+    private Integer hour;
     private Long totalTime;
     private String packageName;
 }

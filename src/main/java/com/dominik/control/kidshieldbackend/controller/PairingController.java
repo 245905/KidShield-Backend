@@ -1,6 +1,7 @@
 package com.dominik.control.kidshieldbackend.controller;
 
 import com.dominik.control.kidshieldbackend.dto.GenerateCodeResponse;
+import com.dominik.control.kidshieldbackend.dto.MessageResponse;
 import com.dominik.control.kidshieldbackend.dto.PairByPinRequest;
 import com.dominik.control.kidshieldbackend.dto.PairByUUIDRequest;
 import com.dominik.control.kidshieldbackend.security.KidShieldUserDetails;
@@ -31,23 +32,23 @@ public class PairingController {
 
     @PreAuthorize("hasRole('SUPERVISOR')")
     @PostMapping(path = "/qr")
-    public ResponseEntity<?> pairAccountsByUUID(
+    public ResponseEntity<MessageResponse> pairAccountsByUUID(
             @CurrentUser KidShieldUserDetails currentUser,
             @RequestBody PairByUUIDRequest request
     ){
         Long id = currentUser.getId();
         pairingCodeService.pairByUUID(request, id);
-        return ResponseEntity.ok("Successfully paired");
+        return ResponseEntity.ok(new MessageResponse("Successfully paired"));
     }
 
     @PreAuthorize("hasRole('SUPERVISOR')")
     @PostMapping(path = "/pin")
-    public ResponseEntity<?> pairAccountsByPin(
+    public ResponseEntity<MessageResponse> pairAccountsByPin(
             @CurrentUser KidShieldUserDetails currentUser,
             @RequestBody PairByPinRequest request
     ){
         Long id = currentUser.getId();
         pairingCodeService.pairByPin(request, id);
-        return ResponseEntity.ok("Successfully paired");
+        return ResponseEntity.ok(new MessageResponse("Successfully paired"));
     }
 }

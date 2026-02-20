@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setEmail(registerRequest.getEmail());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        newUser.setUserType(UserType.MONITORED);
+        newUser.setUserType(registerRequest.getUserType());
         newUser.setIsActive(true);
         newUser.setLastLogin(LocalDateTime.now(clock));
         return userRepository.save(newUser);

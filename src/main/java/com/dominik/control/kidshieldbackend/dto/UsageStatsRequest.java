@@ -14,9 +14,7 @@ import java.util.Date;
 public class UsageStatsRequest {
 
     private Date date;
-    private String appName;
     private String packageName;
-    private Boolean isSystemApp;
 
     private Long lastTimeUsed;
 

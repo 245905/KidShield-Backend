@@ -27,7 +27,7 @@ public class HourlyStats {
     @Column(nullable = false)
     private Date date;
     @Column(nullable = false)
-    private Date hour;
+    private Integer hour;
     @Column(nullable = false)
     private Long totalTime;
     private String packageName;
