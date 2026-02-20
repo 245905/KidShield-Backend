@@ -1,6 +1,7 @@
 package com.dominik.control.kidshieldbackend.service.impl;
 
 import com.dominik.control.kidshieldbackend.dto.AppInfoRequest;
+import com.dominik.control.kidshieldbackend.dto.AppInfoResponse;
 import com.dominik.control.kidshieldbackend.exception.UserNotFoundException;
 import com.dominik.control.kidshieldbackend.mapper.AppInfoMapper;
 import com.dominik.control.kidshieldbackend.model.AppInfo;
@@ -51,5 +52,22 @@ public class AppInfoServiceImpl implements AppInfoService {
         appInfoDiffService.calculateDiff(entities, oldEntities, user, finalReferenceNumber);
 
         return entities;
+    }
+
+    @Override
+    @Transactional
+    public List<AppInfoResponse> retrieveData(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("User not found with id: " + userId)
+        );
+
+        User monitored = userRepository.findBySupervisorsContaining(user).orElseThrow(
+                () -> new UserNotFoundException("Monitored user not found for user with id: " + userId)
+        );
+
+        List<AppInfo> entities = appInfoRepository.findAllByUserWithMaxReferenceNumber(monitored);
+
+        return entities.stream().map(appInfoMapper::toDto).toList();
     }
 }

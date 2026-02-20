@@ -1,19 +1,20 @@
 package com.dominik.control.kidshieldbackend.service.impl;
 
+import com.dominik.control.kidshieldbackend.dto.AppInfoDiffResponse;
+import com.dominik.control.kidshieldbackend.exception.UserNotFoundException;
+import com.dominik.control.kidshieldbackend.mapper.AppInfoDiffMapper;
 import com.dominik.control.kidshieldbackend.model.AppChangeType;
 import com.dominik.control.kidshieldbackend.model.AppInfo;
 import com.dominik.control.kidshieldbackend.model.AppInfoDiff;
 import com.dominik.control.kidshieldbackend.model.User;
 import com.dominik.control.kidshieldbackend.repository.AppInfoDiffRepository;
+import com.dominik.control.kidshieldbackend.repository.UserRepository;
 import com.dominik.control.kidshieldbackend.service.AppInfoDiffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,9 @@ import java.util.stream.Collectors;
 public class AppInfoDiffServiceImpl implements AppInfoDiffService {
 
     private final AppInfoDiffRepository appInfoDiffRepository;
+    private final UserRepository userRepository;
+
+    private final AppInfoDiffMapper appInfoDiffMapper;
 
     @Override
     @Transactional
@@ -89,10 +93,29 @@ public class AppInfoDiffServiceImpl implements AppInfoDiffService {
                     .lastUpdateTime(oldApp.getLastUpdateTime())
                     .user(user)
                     .build();
-        }).toList();
+        })
+                .filter(Objects::nonNull)
+                .toList();
 
-        appInfoDiffRepository.saveAll(addedDiffs);
-        appInfoDiffRepository.saveAll(removedDiffs);
-        appInfoDiffRepository.saveAll(updatedDiffs);
+        if(!addedDiffs.isEmpty()) appInfoDiffRepository.saveAll(addedDiffs);
+        if(!removedDiffs.isEmpty()) appInfoDiffRepository.saveAll(removedDiffs);
+        if(!updatedDiffs.isEmpty()) appInfoDiffRepository.saveAll(updatedDiffs);
+    }
+
+    @Override
+    @Transactional
+    public List<AppInfoDiffResponse> retrieveData(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("User not found with id: " + userId)
+        );
+
+        User monitored = userRepository.findBySupervisorsContaining(user).orElseThrow(
+                () -> new UserNotFoundException("Monitored user not found for user with id: " + userId)
+        );
+
+        List<AppInfoDiff> entities = appInfoDiffRepository.findAllByUserWithMaxReferenceNumber(monitored);
+
+        return entities.stream().map(appInfoDiffMapper::toDto).toList();
     }
 }

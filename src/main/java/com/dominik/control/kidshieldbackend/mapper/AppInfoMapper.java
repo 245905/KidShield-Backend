@@ -1,6 +1,7 @@
 package com.dominik.control.kidshieldbackend.mapper;
 
 import com.dominik.control.kidshieldbackend.dto.AppInfoRequest;
+import com.dominik.control.kidshieldbackend.dto.AppInfoResponse;
 import com.dominik.control.kidshieldbackend.model.AppInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -9,4 +10,5 @@ import org.mapstruct.ReportingPolicy;
 public interface AppInfoMapper {
 
     AppInfo toEntity(AppInfoRequest appInfo);
+    AppInfoResponse toDto(AppInfo appInfo);
 }
