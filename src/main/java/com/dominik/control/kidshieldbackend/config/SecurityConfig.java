@@ -1,6 +1,7 @@
 package com.dominik.control.kidshieldbackend.config;
 
 import com.dominik.control.kidshieldbackend.repository.UserRepository;
+import com.dominik.control.kidshieldbackend.security.CustomAuthenticationEntryPoint;
 import com.dominik.control.kidshieldbackend.security.JwtAuthenticationFilter;
 import com.dominik.control.kidshieldbackend.security.KidShieldUserDetailsService;
 import com.dominik.control.kidshieldbackend.service.AuthenticationService;
@@ -22,6 +23,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    private final CustomAuthenticationEntryPoint authEntryPoint;
+
+    public SecurityConfig(CustomAuthenticationEntryPoint authEntryPoint) {
+        this.authEntryPoint = authEntryPoint;
+    }
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
@@ -58,6 +65,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/tags/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/test/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authEntryPoint)
                 )
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
