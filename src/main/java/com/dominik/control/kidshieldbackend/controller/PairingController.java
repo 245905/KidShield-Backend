@@ -1,9 +1,6 @@
 package com.dominik.control.kidshieldbackend.controller;
 
-import com.dominik.control.kidshieldbackend.dto.GenerateCodeResponse;
-import com.dominik.control.kidshieldbackend.dto.MessageResponse;
-import com.dominik.control.kidshieldbackend.dto.PairByPinRequest;
-import com.dominik.control.kidshieldbackend.dto.PairByUUIDRequest;
+import com.dominik.control.kidshieldbackend.dto.*;
 import com.dominik.control.kidshieldbackend.security.KidShieldUserDetails;
 import com.dominik.control.kidshieldbackend.security.annotation.CurrentUser;
 import com.dominik.control.kidshieldbackend.service.PairingCodeService;
@@ -50,5 +47,15 @@ public class PairingController {
         Long id = currentUser.getId();
         pairingCodeService.pairByPin(request, id);
         return ResponseEntity.ok(new MessageResponse("Successfully paired"));
+    }
+
+    @PostMapping(path = "/check")
+    public ResponseEntity<CheckPairStatusResponse> checkPairStatus(
+            @CurrentUser KidShieldUserDetails currentUser,
+            @RequestBody CheckPairStatusRequest request
+    ){
+        Long id = currentUser.getId();
+        CheckPairStatusResponse response = pairingCodeService.checkPairStatus(request, id);
+        return ResponseEntity.ok(response);
     }
 }
