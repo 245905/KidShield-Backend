@@ -1,8 +1,6 @@
 package com.dominik.control.kidshieldbackend.service.impl;
 
-import com.dominik.control.kidshieldbackend.dto.GenerateCodeResponse;
-import com.dominik.control.kidshieldbackend.dto.PairByPinRequest;
-import com.dominik.control.kidshieldbackend.dto.PairByUUIDRequest;
+import com.dominik.control.kidshieldbackend.dto.*;
 import com.dominik.control.kidshieldbackend.exception.PairingCodeExpiredException;
 import com.dominik.control.kidshieldbackend.exception.PairingCodeNotFoundException;
 import com.dominik.control.kidshieldbackend.exception.UserNotFoundException;
@@ -110,6 +108,23 @@ public class PairingCodeServiceImpl implements PairingCodeService {
 
         pairingCode.setStatus(PairingCodeStatus.PAIRED_BY_PIN);
         pairingCodeRepository.save(pairingCode);
+    }
+
+    @Override
+    public CheckPairStatusResponse checkPairStatus(CheckPairStatusRequest request, Long userId) {
+        PairingCode pairingCode = pairingCodeRepository.findByPin(request.getPin()).orElseThrow(
+                () -> new PairingCodeNotFoundException("Pairing code not found with pin: " + request.getPin())
+        );
+
+        if (pairingCode.getStatus() == PairingCodeStatus.UNUSED) {
+            return CheckPairStatusResponse.builder()
+                    .isPaired(false)
+                    .build();
+        }
+
+        return CheckPairStatusResponse.builder()
+                .isPaired(true)
+                .build();
     }
 
     private void performPairing(PairingCode pairingCode, User supervisor) {
